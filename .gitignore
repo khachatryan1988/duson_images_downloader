@@ -1,0 +1,12 @@
+# venv / caches
+.venv/
+__pycache__/
+*.pyc
+
+# local env & logs
+.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
