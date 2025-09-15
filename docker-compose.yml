@@ -1,0 +1,41 @@
+services:
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    image: mysql_duson:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: "__duson"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot --silent" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "3306:3306"
+
+  downloader:
+    build:
+      context: .           # ВАЖНО: контекст — корень, где лежат Dockerfile, requirements.txt и папка src
+      dockerfile: Dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: ""       # пустой пароль
+      DB_NAME: "__duson"
+      OUTPUT_DIR: /data
+    volumes:
+      - ./downloads:/data
+
+volumes:
+  mysql-data:
