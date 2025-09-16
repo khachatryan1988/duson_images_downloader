@@ -5,9 +5,11 @@ __pycache__/
 
 # local env & logs
 .env
-.env.example
 *.log
 
 # OS
 .DS_Store
 Thumbs.db
+
+# downloads folder
+downloads/

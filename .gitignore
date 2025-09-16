@@ -9,5 +9,7 @@ __pycache__/
 
 # OS
 .DS_Store
-.downloads
 Thumbs.db
+
+# downloads folder
+downloads/
