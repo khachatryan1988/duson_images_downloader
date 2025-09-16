@@ -16,7 +16,9 @@ DB_NAME = os.getenv("DB_NAME", "__duson")
 
 # Must end with /
 BASE_URL = os.getenv("BASE_URL", "https://duson.am/storage/media/")
-OUTPUT_DIR = os.getenv("OUTPUT_DIR", ".")  # where to save folders (default: repo root)
+
+OUTPUT_DIR = os.getenv("OUTPUT_DIR") or os.path.join(os.path.dirname(__file__), "..", "downloads")
+OUTPUT_DIR = os.path.abspath(OUTPUT_DIR)
 
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", "10"))  # seconds
 
@@ -45,6 +47,10 @@ def ensure_trailing_slash(s: str) -> str:
 # -------- Main --------
 def main():
     base_url = ensure_trailing_slash(BASE_URL)
+
+    # Гарантируем существование базовой папки загрузок
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    print(f"[Init] Images will be saved to: {OUTPUT_DIR}")
 
     try:
         conn = mysql.connector.connect(**db_config)
